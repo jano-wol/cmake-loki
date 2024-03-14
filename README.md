@@ -20,12 +20,12 @@ After the setup is done, the repo can be configured, builded and tested with the
   
 # Compilers
 The default compiler of integrate-loki is g++. Clang is also perfectly fine to compile the codebase of the repo, 
-but it comes with a few additional dependency. To install clang on Ubuntu cast the followings:
-sudo apt install clang
-sudo apt install libstdc++-12-dev
-sudo apt-get install libc++-dev
-sudo apt install libc++abi-dev
-After successful install the project compilers can be switched by changing 
+but it comes with a few additional dependency. To install clang on Ubuntu cast the followings:  
+sudo apt install clang  
+sudo apt install libstdc++-12-dev  
+sudo apt-get install libc++-dev  
+sudo apt install libc++abi-dev  
+After successful install the project compilers can be switched by changing   
 CMAKE_CXX_COMPILER=g++  
 to  
 CMAKE_CXX_COMPILER=clang++  
