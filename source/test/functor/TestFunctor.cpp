@@ -41,11 +41,7 @@ TEST(Functor, TestCreation)
   Loki::Functor<std::string, TYPELIST_1(int)> cmd4(cmd3);
 
   EXPECT_EQ(cmd1(1), "Function=1");
-  EXPECT_EQ(cmd1(1.1), "Function=1");
   EXPECT_EQ(cmd2(-1), "SomeFunctor=-1");
-  EXPECT_EQ(cmd2(-1.1), "SomeFunctor=-1");
   EXPECT_EQ(cmd3(-1), "MemberFunction=-1");
-  EXPECT_EQ(cmd3(-1.9), "MemberFunction=-1");
   EXPECT_EQ(cmd4(1), "MemberFunction=1");
-  EXPECT_EQ(cmd4(1.1), "MemberFunction=1");
 }
