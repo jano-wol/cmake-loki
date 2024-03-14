@@ -749,7 +749,7 @@ namespace Loki
         Functor(const Functor& rhs) : spImpl_(Impl::Clone(rhs.spImpl_.get()))
         {}
         
-        Functor(std::unique_ptr<Impl> spImpl) : spImpl_(spImpl) // WARNING_FIX! ORIGINAL CODE: Functor(std::auto_ptr<Impl> spImpl) : spImpl_(spImpl)
+        Functor(std::unique_ptr<Impl> spImpl) : spImpl_(std::move(spImpl)) // WARNING_FIX! ORIGINAL CODE: Functor(std::auto_ptr<Impl> spImpl) : spImpl_(spImpl)
         {}
         
         template <typename Fun>

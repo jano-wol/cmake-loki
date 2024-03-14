@@ -31,6 +31,8 @@ struct SomeClass
   }
 };
 
+int linear(int a, int b, int x) { return a * x + b; }
+
 TEST(Functor, TestCreation)
 {
   Loki::Functor<std::string, TYPELIST_1(int)> cmd1(Function);
@@ -44,4 +46,12 @@ TEST(Functor, TestCreation)
   EXPECT_EQ(cmd2(-1), "SomeFunctor=-1");
   EXPECT_EQ(cmd3(-1), "MemberFunction=-1");
   EXPECT_EQ(cmd4(1), "MemberFunction=1");
+}
+
+TEST(Functor, TestBind)
+{
+  Loki::Functor<int, TYPELIST_3(int, int, int)> cmd1(linear);
+  Loki::Functor<int, TYPELIST_2(int, int)> cmd2(BindFirst(cmd1, 10));
+  EXPECT_EQ(cmd1(10, 5, 7), 75);
+  EXPECT_EQ(cmd2(5, 7), 75);
 }
