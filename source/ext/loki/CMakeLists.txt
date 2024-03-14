@@ -1,6 +1,6 @@
 set(target loki)
 set(library_path "${CMAKE_CURRENT_SOURCE_DIR}/${target}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUCHAR_MAX=255 -Wno-deprecated")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUCHAR_MAX=255")
 set(headers ${library_path}/AbstractFactory.h
             ${library_path}/AssocVector.h
             ${library_path}/DataGenerators.h
@@ -26,5 +26,5 @@ set(sources ${library_path}/Singleton.cpp
             ${library_path}/SmallObj.cpp
             )
 add_library(${target} ${sources} ${headers})
-target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${target} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
