@@ -1,5 +1,6 @@
 set(target loki)
 set(library_path "${CMAKE_CURRENT_SOURCE_DIR}/${target}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUCHAR_MAX=255 -Wno-deprecated")
 set(headers ${library_path}/AbstractFactory.h
             ${library_path}/AssocVector.h
             ${library_path}/DataGenerators.h
