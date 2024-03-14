@@ -1,7 +1,7 @@
-﻿set(target singleton-tests-creation-policy)
+﻿set(target singleton-creation-tests)
 
 set(source
-    TestSingletonCreationPolicy.cpp
+    TestSingletonCreation.cpp
 )
 
 add_executable(${target} ${source})

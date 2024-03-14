@@ -13,7 +13,7 @@ public:
 
 size_t A::constuctorCount = 0;
 
-TEST(SingletonCreationPolicy, TestSingletonCreationPolicy)
+TEST(Singleton, TestCreation)
 {
   typedef Loki::SingletonHolder<A, Loki::CreateUsingNew> SingleANew;
   typedef Loki::SingletonHolder<A, Loki::CreateUsingMalloc> SingleAMalloc;

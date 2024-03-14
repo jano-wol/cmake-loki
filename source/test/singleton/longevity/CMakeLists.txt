@@ -1,7 +1,7 @@
-﻿set(target singleton-tests-lifetime_policy_default)
+﻿set(target singleton-longevity-tests)
 
 set(source
-    TestSingletonLifetimePolicyDefault.cpp
+    TestSingletonLongevity.cpp
 )
 
 add_executable(${target} ${source})
