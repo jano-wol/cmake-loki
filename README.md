@@ -8,7 +8,7 @@ Known dependencies:
 cmake  
 ninja   
 
-### Setup (tested on Ubuntu 22.04):  
+### Setup commands (tested on Ubuntu 22.04):  
 sudo snap install cmake --classic  
 sudo apt-get -y install ninja-build   
 
