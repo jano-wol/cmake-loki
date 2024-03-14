@@ -7,11 +7,10 @@ set(sources
 add_executable(${target} ${sources})
 
 target_link_libraries(${target}
-    PUBLIC
-	loki
 	PRIVATE
 	gmock-dev
 	GTest::gtest_main
+	loki
 )
 gtest_discover_tests(${target})
 
