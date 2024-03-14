@@ -18,6 +18,11 @@ After the setup is done, the repo can be configured, builded and tested with the
 ./source/scripts/build.sh release  
 ./source/scripts/test.sh release  
 If all tests of test.sh succeed, the repo installation is considered successful!
+
+# Repo structure
+The client code, which is relying on Loki library, can be found in ./source/test 
+After the build step, the compiled executables can be found in ./build/release/test/bin
+
   
 # Compilers
 The default compiler of cmake-loki is g++. Clang is also perfectly fine to compile the codebase of the repo, 
