@@ -56,3 +56,23 @@ TEST(Singleton, TestDefaultLifetime)
   SingleD::Instance();
   SingleE::Instance();
 }
+
+class Log
+{
+public:
+  std::string getName() { return "name"; };
+};
+typedef Loki::SingletonHolder<Log> SingleLog;
+
+class F
+{
+public:
+  ~F() { EXPECT_ANY_THROW(SingleLog::Instance().getName()); }
+};
+typedef Loki::SingletonHolder<F> SingleF;
+
+TEST(Singleton, TestThrow)
+{
+  SingleF::Instance();
+  SingleLog::Instance();
+}
