@@ -46,6 +46,9 @@ typedef Loki::SingletonHolder<C, Loki::CreateUsingNew, Loki::SingletonWithLongev
 typedef Loki::SingletonHolder<D, Loki::CreateUsingNew, Loki::SingletonWithLongevity> SingleD;
 typedef Loki::SingletonHolder<E, Loki::CreateUsingNew, Loki::SingletonWithLongevity> SingleE;
 
+// Singletons with larger longevity will be destructed first. This contradicts the Modern C++ book's statement.
+// This contradiction is known: http://erdani.org/index.php/books/modern-c-design/errata/index.html
+// See the corrections of p. 140
 inline unsigned GetLongevity(A*) { return 5; }
 inline unsigned GetLongevity(B*) { return 8; }
 inline unsigned GetLongevity(C*) { return 5; }
