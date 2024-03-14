@@ -38,22 +38,22 @@ namespace Loki
         typedef int IntType; 
 
         static IntType AtomicAdd(volatile IntType& lval, IntType val)
-        { return lval = lval + val; } // WARNING_FIX! ORIGINAL CODE: { return lval += val; }
+        { lval = lval + val; return lval; } // WARNING_FIX! ORIGINAL CODE: { return lval += val; }
         
         static IntType AtomicSubtract(volatile IntType& lval, IntType val)
-        { return lval = lval - val; } // WARNING_FIX! ORIGINAL CODE: { return lval -= val; }
+        { lval = lval - val; return lval; } // WARNING_FIX! ORIGINAL CODE: { return lval -= val; }
 
         static IntType AtomicMultiply(volatile IntType& lval, IntType val)
-        { return lval = lval * val; } // WARNING_FIX! ORIGINAL CODE: { return lval *= val; }
+        { lval = lval * val; return lval; } // WARNING_FIX! ORIGINAL CODE: { return lval *= val; }
         
         static IntType AtomicDivide(volatile IntType& lval, IntType val)
-        { return lval = lval / val; } // WARNING_FIX! ORIGINAL CODE: { return lval /= val; }
+        { lval = lval / val; return lval; } // WARNING_FIX! ORIGINAL CODE: { return lval /= val; }
         
         static IntType AtomicIncrement(volatile IntType& lval)
-        { return lval = lval + 1; } // WARNING_FIX! ORIGINAL CODE: { return ++lval; }
+        { lval = lval + 1; return lval; } // WARNING_FIX! ORIGINAL CODE: { return ++lval; }
         
         static IntType AtomicDecrement(volatile IntType& lval)
-        { return lval = lval - 1; } // WARNING_FIX! ORIGINAL CODE: { return --lval; }
+        { lval = lval - 1; return lval; } // WARNING_FIX! ORIGINAL CODE: { return --lval; }
         
         static void AtomicAssign(volatile IntType & lval, IntType val)
         { lval = val; }
