@@ -27,7 +27,7 @@ After the build step, the compiled executables can be found in ./build/release/t
 Modern compilers generate a few warnings during compiling the Loki library. In cmake-loki a few very simple fixes were added to Loki library to resolve these warnings.
 The full list of changes can be found by searching in the codebase for:  
 // WARNING_FIX! ORIGINAL CODE  
-It is perfectly possible to overwrite folder ./source/ext/loki/loki by the original Loki library (available at https://github.com/dutor/loki). A few warnings will pop up, but the cmake-loki repo should still work with after the change. 
+It is perfectly possible to overwrite folder ./source/ext/loki/loki by the original Loki library (available at https://github.com/dutor/loki). A few warnings will pop up, but the cmake-loki repo should still work after the change. 
 
 # Compilers
 The default compiler of cmake-loki is g++. Clang is also perfectly fine to compile the codebase of the repo, 
