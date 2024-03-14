@@ -26,5 +26,5 @@ set(sources ${library_path}/Singleton.cpp
             ${library_path}/SmallObj.cpp
             )
 add_library(${target} ${sources} ${headers})
-target_include_directories(${target} PUBLIC ${library_path})
+target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
