@@ -1,7 +1,7 @@
-# integrate-loki
-integrate-loki demonstrates how to integrate the Loki library (written by Andrei Alexandrescu) to a modern and scalable CMake/C++ project.  
+# cmake-loki
+cmake-loki demonstrates how to integrate the Loki library (written by Andrei Alexandrescu) to a modern and scalable CMake/C++ project.  
 
-# Setup integrate-loki
+# Setup cmake-loki
 Supported os: Linux  
 
 Known dependencies:  
@@ -20,7 +20,7 @@ After the setup is done, the repo can be configured, builded and tested with the
 If all tests of test.sh succeed, the repo installation is considered successful!
   
 # Compilers
-The default compiler of integrate-loki is g++. Clang is also perfectly fine to compile the codebase of the repo, 
+The default compiler of cmake-loki is g++. Clang is also perfectly fine to compile the codebase of the repo, 
 but it comes with a few additional dependency. To install clang on Ubuntu cast the followings:  
 sudo apt install clang  
 sudo apt install libstdc++-12-dev  
