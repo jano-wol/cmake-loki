@@ -36,7 +36,9 @@ public:
   ~E()
   {
     collector << "e";
-    EXPECT_EQ(collector.str(), "bdcae");
+    if (collector.str() != "bdcae") {
+      exit(1);
+    }
   }
 };
 
