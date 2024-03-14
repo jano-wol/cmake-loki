@@ -33,6 +33,10 @@ struct SomeClass
 
 int linear(int a, int b, int x) { return a * x + b; }
 
+void printer1(std::stringstream& ss) { ss << "printer1 message. "; }
+
+void printer2(std::stringstream& ss) { ss << "printer2 message. "; }
+
 TEST(Functor, TestCreation)
 {
   Loki::Functor<std::string, TYPELIST_1(int)> cmd1(Function);
@@ -54,4 +58,14 @@ TEST(Functor, TestBind)
   Loki::Functor<int, TYPELIST_2(int, int)> cmd2(BindFirst(cmd1, 10));
   EXPECT_EQ(cmd1(10, 5, 7), 75);
   EXPECT_EQ(cmd2(5, 7), 75);
+}
+
+TEST(Functor, TestChain)
+{
+  Loki::Functor<void, TYPELIST_1(std::stringstream&)> cmd1(printer1);
+  Loki::Functor<void, TYPELIST_1(std::stringstream&)> cmd2(printer2);
+  Loki::Functor<void, TYPELIST_1(std::stringstream&)> cmd3(Chain(cmd1, cmd2));
+  std::stringstream ss;
+  cmd3(ss);
+  EXPECT_EQ(ss.str(), "printer1 message. printer2 message. ");
 }
