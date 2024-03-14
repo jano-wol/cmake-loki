@@ -1,2 +1,3 @@
 add_subdirectory(creation_policy)
+add_subdirectory(lifetime_policy_default)
 
