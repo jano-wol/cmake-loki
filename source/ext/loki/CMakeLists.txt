@@ -24,6 +24,6 @@ set(headers ${library_path}/AbstractFactory.h
 set(sources ${library_path}/Singleton.cpp
             ${library_path}/SmallObj.cpp
             )
-add_library(${target} SHARED ${sources} ${headers})
+add_library(${target} ${sources} ${headers})
 target_include_directories(${target} PUBLIC ${library_path})
 
