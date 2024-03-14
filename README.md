@@ -17,6 +17,7 @@ After the setup is done, the repo can be configured, builded and tested with the
 ./source/scripts/configure.sh release  
 ./source/scripts/build.sh release  
 ./source/scripts/test.sh release  
+If all tests of test.sh succeed, the repo installation is considered successful!
   
 # Compilers
 The default compiler of integrate-loki is g++. Clang is also perfectly fine to compile the codebase of the repo, 
