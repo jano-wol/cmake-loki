@@ -18,14 +18,40 @@ struct TDeepCopy
   TDeepCopy* Clone() { return new TDeepCopy{i, s}; }
 };
 
-TEST(SmartPtr, TestNoCopy)
+TEST(SmartPtr, TestSmartPtr)
 {
-  auto* ptr = new T{1, "test"};
-  Loki::SmartPtr<T, Loki::NoCopy> tPtr1(ptr);
+  Loki::SmartPtr<T> tPtr1 = new T{1, "test"};
+  Loki::SmartPtr<T> tPtr2 = tPtr1;
   tPtr1->i = 1;
   tPtr1->s = "test1";
-  EXPECT_EQ(ptr->i, 1);
-  EXPECT_EQ(ptr->s, "test1");
+  tPtr2->i = 2;
+  tPtr2->s = "test2";
+  EXPECT_EQ(tPtr1->i, 2);
+  EXPECT_EQ(tPtr1->s, "test2");
+  EXPECT_EQ(tPtr2->i, 2);
+  EXPECT_EQ(tPtr2->s, "test2");
+}
+
+TEST(SmartPtr, TestDeepCopy)
+{
+  Loki::SmartPtr<TDeepCopy, Loki::DeepCopy> tPtr1 = new TDeepCopy{1, "test"};
+  Loki::SmartPtr<TDeepCopy, Loki::DeepCopy> tPtr2 = tPtr1;
+  tPtr1->i = 1;
+  tPtr1->s = "test1";
+  tPtr2->i = 2;
+  tPtr2->s = "test2";
+  EXPECT_EQ(tPtr1->i, 1);
+  EXPECT_EQ(tPtr1->s, "test1");
+  EXPECT_EQ(tPtr2->i, 2);
+  EXPECT_EQ(tPtr2->s, "test2");
+}
+
+TEST(SmartPtr, TestNoCopy)
+{
+  Loki::SmartPtr<T, Loki::NoCopy> tPtr1 = new T{1, "test"};
+  // Loki::SmartPtr<T, Loki::NoCopy> tPtr2 = tPtr1;
+  tPtr1->i = 1;
+  tPtr1->s = "test1";
   EXPECT_EQ(tPtr1->i, 1);
   EXPECT_EQ(tPtr1->s, "test1");
 }
@@ -33,31 +59,11 @@ TEST(SmartPtr, TestNoCopy)
 TEST(SmartPtr, TestDestructiveCopy)
 {
   typedef Loki::SmartPtr<T, Loki::DestructiveCopy, Loki::DisallowConversion, Loki::RejectNull> DestructivePtr;
-  auto* ptr = new T{1, "test"};
-  DestructivePtr tPtr1(ptr);
+  DestructivePtr tPtr1 = new T{1, "test"};
   DestructivePtr tPtr2 = tPtr1;
   tPtr2->i = 2;
   tPtr2->s = "test2";
-  EXPECT_EQ(ptr->i, 2);
-  EXPECT_EQ(ptr->s, "test2");
   EXPECT_EQ(tPtr2->i, 2);
   EXPECT_EQ(tPtr2->s, "test2");
   EXPECT_ANY_THROW(tPtr1->i);
-}
-
-TEST(SmartPtr, TestDeepCopy)
-{
-  auto* ptr = new TDeepCopy{1, "test"};
-  Loki::SmartPtr<TDeepCopy, Loki::DeepCopy> tPtr1(ptr);
-  Loki::SmartPtr<TDeepCopy, Loki::DeepCopy> tPtr2 = tPtr1;
-  tPtr1->i = 1;
-  tPtr1->s = "test1";
-  tPtr2->i = 2;
-  tPtr2->s = "test2";
-  EXPECT_EQ(ptr->i, 1);
-  EXPECT_EQ(ptr->s, "test1");
-  EXPECT_EQ(tPtr1->i, 1);
-  EXPECT_EQ(tPtr1->s, "test1");
-  EXPECT_EQ(tPtr2->i, 2);
-  EXPECT_EQ(tPtr2->s, "test2");
 }
