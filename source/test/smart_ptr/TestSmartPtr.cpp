@@ -4,6 +4,12 @@
 #include <iostream>
 #include <sstream>
 
+struct T
+{
+  int i;
+  std::string s;
+};
+
 struct TDeepCopy
 {
   int i;
@@ -11,6 +17,18 @@ struct TDeepCopy
 
   TDeepCopy* Clone() { return new TDeepCopy{i, s}; }
 };
+
+TEST(SmartPtr, TestNoCopy)
+{
+  auto* ptr = new T{1, "test"};
+  Loki::SmartPtr<T, Loki::NoCopy> tPtr1(ptr);
+  tPtr1->i = 1;
+  tPtr1->s = "test1";
+  EXPECT_EQ(ptr->i, 1);
+  EXPECT_EQ(ptr->s, "test1");
+  EXPECT_EQ(tPtr1->i, 1);
+  EXPECT_EQ(tPtr1->s, "test1");
+}
 
 TEST(SmartPtr, TestDeepCopy)
 {
