@@ -266,7 +266,7 @@ namespace Loki
         static P Clone(const P& val)
         { return val->Clone(); }
         
-        static bool Release(const P& val)
+        static bool Release(const P& /*val*/) // WARNING_FIX! ORIGINAL CODE: static bool Release(const P& val)
         { return true; }
         
         static void Swap(DeepCopy&)

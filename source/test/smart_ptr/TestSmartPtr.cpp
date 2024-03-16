@@ -65,5 +65,5 @@ TEST(SmartPtr, TestDestructiveCopy)
   tPtr2->s = "test2";
   EXPECT_EQ(tPtr2->i, 2);
   EXPECT_EQ(tPtr2->s, "test2");
-  EXPECT_ANY_THROW(tPtr1->i);
+  EXPECT_ANY_THROW((void)tPtr1->i);
 }
