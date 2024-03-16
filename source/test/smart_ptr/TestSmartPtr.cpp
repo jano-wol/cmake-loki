@@ -30,6 +30,21 @@ TEST(SmartPtr, TestNoCopy)
   EXPECT_EQ(tPtr1->s, "test1");
 }
 
+TEST(SmartPtr, TestDestructiveCopy)
+{
+  typedef Loki::SmartPtr<T, Loki::DestructiveCopy, Loki::DisallowConversion, Loki::RejectNull> DestructivePtr;
+  auto* ptr = new T{1, "test"};
+  DestructivePtr tPtr1(ptr);
+  DestructivePtr tPtr2 = tPtr1;
+  tPtr2->i = 2;
+  tPtr2->s = "test2";
+  EXPECT_EQ(ptr->i, 2);
+  EXPECT_EQ(ptr->s, "test2");
+  EXPECT_EQ(tPtr2->i, 2);
+  EXPECT_EQ(tPtr2->s, "test2");
+  EXPECT_ANY_THROW(tPtr1->i);
+}
+
 TEST(SmartPtr, TestDeepCopy)
 {
   auto* ptr = new TDeepCopy{1, "test"};
