@@ -23,11 +23,9 @@ If all tests of test.sh succeed, the repo installation is considered successful!
 The client code, which is relying on Loki library, can be found in ./source/test  
 After the build step, the compiled executables can be found in ./build/release/test/bin
 
-# Warning fixes in Loki library
-Modern compilers generate a few warnings during compiling the Loki library. In cmake-loki a few very simple fixes were added to Loki library to resolve these warnings.
-The full list of changes can be found by searching in the codebase for:  
-// WARNING_FIX! ORIGINAL CODE  
-It is perfectly possible to overwrite folder ./source/ext/loki/loki by the original Loki library (available at https://github.com/dutor/loki). A few warnings will pop up, but the cmake-loki repo should still work after the change. 
+# Warning and depricate fixes in Loki library
+Modern compilers generate a few warnings and depricate errors during compiling the Loki library. In cmake-loki a few very simple fixes were added to Loki library to resolve these problems. The full list of changes can be found by searching in the codebase for:  
+// LOKI_CHANGE! ORIGINAL CODE  
 
 # Compilers
 The default compiler of cmake-loki is g++. Clang is also perfectly fine to compile the codebase of the repo, 

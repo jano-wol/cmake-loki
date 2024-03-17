@@ -318,7 +318,7 @@ namespace Loki
     template <class T>
     struct NoDestroy
     {
-        static void ScheduleDestruction(T*, atexit_pfn_t /*pFun*/) // WARNING_FIX! ORIGINAL CODE: static void ScheduleDestruction(T*, atexit_pfn_t pFun)
+        static void ScheduleDestruction(T*, atexit_pfn_t /*pFun*/) // LOKI_CHANGE! ORIGINAL CODE: static void ScheduleDestruction(T*, atexit_pfn_t pFun)
         {}
         
         static void OnDeadReference()

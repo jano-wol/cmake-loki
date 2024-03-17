@@ -93,14 +93,14 @@ namespace Loki
 
         typedef C key_compare;
         typedef A allocator_type;
-        typedef typename A::reference reference;
-        typedef typename A::const_reference const_reference;
+        using reference = typename std::allocator_traits<A>::value_type&; // LOKI_CHANGE! ORIGINAL CODE: typedef typename A::reference reference;
+        using const_reference = const typename std::allocator_traits<A>::value_type&; // LOKI_CHANGE! ORIGINAL_CODE: typedef typename A::const_reference const_reference;
         typedef typename Base::iterator iterator;
         typedef typename Base::const_iterator const_iterator;
         typedef typename Base::size_type size_type;
         typedef typename Base::difference_type difference_type;
-        typedef typename A::pointer pointer;
-        typedef typename A::const_pointer const_pointer;
+        typedef typename std::allocator_traits<A>::pointer pointer; // LOKI_CHANGE! ORIGINAL CODE: typedef typename A::pointer pointer;
+        typedef typename std::allocator_traits<A>::const_pointer const_pointer; // LOKI_CHANGE! ORIGINAL CODE: typedef typename A::const_pointer const_pointer;
         typedef typename Base::reverse_iterator reverse_iterator;
         typedef typename Base::const_reverse_iterator const_reverse_iterator;
 

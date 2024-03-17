@@ -370,7 +370,7 @@ namespace { // anoymous
 
 // See LWG DR #270
 struct CompareFixedAllocatorSize
-    // WARNING_FIX! ORIGINAL CODE: : std::binary_function<const FixedAllocator &, std::size_t, bool>
+    // LOKI_CHANGE! ORIGINAL CODE: : std::binary_function<const FixedAllocator &, std::size_t, bool>
 {
     bool operator()(const FixedAllocator &x, std::size_t numBytes) const
     {
