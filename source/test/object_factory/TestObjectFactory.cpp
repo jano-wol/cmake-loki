@@ -2,7 +2,8 @@
 
 #include <loki/Factory.h>
 #include <loki/Singleton.h>
-#include <iostream>
+#include <sstream>
+#include <vector>
 
 class Shape
 {
@@ -50,15 +51,23 @@ TEST(ObjectFactory, TestObjectFactory)
   factory.Register("line", (Shape * (*)()) createLine);
   factory.Register("circle", (Shape * (*)()) createCircle);
 
-  auto* a1 = factory.CreateObject("polygon");
-  auto* a2 = factory.CreateObject("polygon");
-  a1->setPos({100, 100});
-  a2->setPos({200, 200});
-  auto* b = factory.CreateObject("line");
-  auto* c = factory.CreateObject("circle");
-  EXPECT_EQ(a1->calculate(), 203);
-  EXPECT_EQ(a2->calculate(), 403);
-  EXPECT_EQ(b->calculate(), 2);
-  EXPECT_EQ(c->calculate(), 360);
+  std::string command = "polygon 100 100 polygon 200 200 line 0 0 circle 10 10";
+  std::stringstream ss(command);
+  std::string typeStr;
+  std::string coordStr;
+  std::vector<std::unique_ptr<Shape>> shapes;
+  while (ss >> typeStr) {
+    std::unique_ptr<Shape> aPtr(factory.CreateObject(typeStr));
+    ss >> coordStr;
+    int x = std::stoi(coordStr);
+    ss >> coordStr;
+    int y = std::stoi(coordStr);
+    aPtr->setPos({x, y});
+    shapes.emplace_back(std::move(aPtr));
+  }
+  EXPECT_EQ(shapes[0]->calculate(), 203);
+  EXPECT_EQ(shapes[1]->calculate(), 403);
+  EXPECT_EQ(shapes[2]->calculate(), 2);
+  EXPECT_EQ(shapes[3]->calculate(), 380);
   EXPECT_ANY_THROW(factory.CreateObject("cube"));
 }
