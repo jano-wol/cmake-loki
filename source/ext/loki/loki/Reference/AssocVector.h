@@ -180,8 +180,8 @@ namespace Loki
         {
             if (pos != end() && this->operator()(*pos, val) &&
                 (pos == end() - 1 ||
-                    !this->operator()(val, pos[1]) &&
-                        this->operator()(pos[1], val)))
+                    (!this->operator()(val, pos[1]) && // LOKI_CHANGE! ORIGINAL CODE: !this->operator()(val, pos[1]) &&
+                        this->operator()(pos[1], val)))) // LOKI_CHANGE! ORIGINAL CODE: this->operator()(pos[1], val)))
             {
                 return Base::insert(pos, val);
             }
