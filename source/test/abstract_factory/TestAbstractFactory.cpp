@@ -8,73 +8,76 @@
 class Shape
 {
 public:
-  virtual int vol() const = 0;
+  virtual std::string name() const = 0;
   virtual ~Shape(){};
 };
 
-class Shape2D
+class Shape2D : public Shape
 {
 public:
-  virtual int vol() const = 0;
+  virtual std::string name() const = 0;
   virtual ~Shape2D(){};
-
-protected:
-  int x;
-  int y;
 };
 
-class Shape3D
+class Shape3D : public Shape
 {
 public:
-  virtual int vol() const = 0;
+  virtual std::string name() const = 0;
   virtual ~Shape3D(){};
-
-protected:
-  int x;
-  int y;
-  int z;
 };
 
 class Line : public Shape2D
 {
 public:
   ~Line(){};
-  int vol() const override { return 0; }
+  std::string name() const override { return "Line"; }
 };
 
 class Circle : public Shape2D
 {
 public:
   ~Circle(){};
-  int vol() const override { return 3 * x * x; }
+  std::string name() const override { return "Circle"; }
 };
 
-class Square : Shape2D
+class Rectangle : public Shape2D
 {
 public:
-  ~Square(){};
-  int vol() const override { return x * y; }
+  ~Rectangle(){};
+  std::string name() const override { return "Rectangle"; }
 };
 
-class Plane : Shape3D
+class Plane : public Shape3D
 {
 public:
   ~Plane(){};
-  int vol() const override { return 0; }
+  std::string name() const override { return "Plane"; }
 };
 
-class Ball : Shape3D
+class Ball : public Shape3D
 {
 public:
   ~Ball(){};
-  int vol() const override { return x * x * x; }
+  std::string name() const override { return "Ball"; }
 };
 
-class Cube : Shape3D
+class Box : public Shape3D
 {
 public:
-  ~Cube(){};
-  int vol() const override { return x * y * z; }
+  ~Box(){};
+  std::string name() const override { return "Box"; }
 };
 
-TEST(AbstractFactory, TestAbstractFactory) {}
+typedef Loki::AbstractFactory<TYPELIST_2(Shape2D, Shape3D)> AbstractShapeFactory;
+typedef Loki::ConcreteFactory<AbstractShapeFactory, Loki::OpNewFactoryUnit, TYPELIST_2(Line, Plane)>
+    ShapeFactory2D;
+/* typedef Loki::ConcreteFactory<AbstractShapeFactory, Loki::OpNewFactoryUnit, TYPELIST_3(Plane, Ball, Box)>
+    ShapeFactory3D; */
+
+TEST(AbstractFactory, TestAbstractFactory)
+{
+  typedef Loki::SingletonHolder<ShapeFactory2D, Loki::CreateUsingNew> Single2DFactory;
+  auto& factory2D = Single2DFactory::Instance();
+  Shape* pCircle = factory2D.Create<Line>();
+  Shape* pPlane = factory2D.Create<Plane>();
+}
