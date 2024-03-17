@@ -53,7 +53,7 @@ Line* cloneLine(const Line* other) { return new Line(*other); }
 Circle* cloneCircle(const Circle* other) { return new Circle(*other); }
 NotRegistered* cloneNotRegistered(const NotRegistered* other) { return new NotRegistered(*other); }
 
-TEST(ObjectFactory, TestCloneFactory)
+TEST(CloneFactory, TestCloneFactory)
 {
   typedef Loki::Factory<Shape, std::string> FactoryType;
   typedef Loki::CloneFactory<Shape> CloneFactoryType;
