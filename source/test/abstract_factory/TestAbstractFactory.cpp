@@ -8,31 +8,73 @@
 class Shape
 {
 public:
+  virtual int vol() const = 0;
   virtual ~Shape(){};
 };
 
-class Polygon : public Shape
+class Shape2D
 {
 public:
-  ~Polygon(){};
+  virtual int vol() const = 0;
+  virtual ~Shape2D(){};
+
+protected:
+  int x;
+  int y;
 };
 
-class Line : public Shape
+class Shape3D
+{
+public:
+  virtual int vol() const = 0;
+  virtual ~Shape3D(){};
+
+protected:
+  int x;
+  int y;
+  int z;
+};
+
+class Line : public Shape2D
 {
 public:
   ~Line(){};
+  int vol() const override { return 0; }
 };
 
-class Circle : public Shape
+class Circle : public Shape2D
 {
 public:
   ~Circle(){};
+  int vol() const override { return 3 * x * x; }
 };
 
-Polygon* createPolygon() { return new Polygon; }
-Line* createLine() { return new Line; }
-Circle* createCircle() { return new Circle; }
-
-TEST(AbstractFactory, TestAbstractFactory)
+class Square : Shape2D
 {
-}
+public:
+  ~Square(){};
+  int vol() const override { return x * y; }
+};
+
+class Plane : Shape3D
+{
+public:
+  ~Plane(){};
+  int vol() const override { return 0; }
+};
+
+class Ball : Shape3D
+{
+public:
+  ~Ball(){};
+  int vol() const override { return x * x * x; }
+};
+
+class Cube : Shape3D
+{
+public:
+  ~Cube(){};
+  int vol() const override { return x * y * z; }
+};
+
+TEST(AbstractFactory, TestAbstractFactory) {}
