@@ -69,14 +69,22 @@ public:
 };
 
 typedef Loki::AbstractFactory<TYPELIST_2(Shape2D, Shape3D)> AbstractShapeFactory;
+typedef Loki::AbstractFactory<TYPELIST_2(Shape2D, Shape3D)> AbstractShapeFactory2;
 typedef Loki::ConcreteFactory<AbstractShapeFactory, Loki::OpNewFactoryUnit, TYPELIST_2(Line, Plane)> LowDimension;
+typedef Loki::ConcreteFactory<AbstractShapeFactory2, Loki::OpNewFactoryUnit, TYPELIST_2(Circle, Box)> Mixed;
 
 TEST(AbstractFactory, TestAbstractFactory)
 {
   typedef Loki::SingletonHolder<LowDimension, Loki::CreateUsingNew> SingleLowDimensionFactory;
-  auto& lowDimensionFactory = SingleLowDimensionFactory::Instance();
-  Shape* pLine = lowDimensionFactory.Create<Shape2D>();
-  Shape* pPlane = lowDimensionFactory.Create<Shape3D>();
+  typedef Loki::SingletonHolder<Mixed, Loki::CreateUsingNew> MixedFactory;
+  auto& lowDimensionFactory = SingleLowDimensionFactory::Instance(); 
+  auto& mixedFactory = MixedFactory::Instance();  
+  std::unique_ptr<Shape> pLine(lowDimensionFactory.Create<Shape2D>());
+  std::unique_ptr<Shape> pPlane(lowDimensionFactory.Create<Shape3D>());
+  std::unique_ptr<Shape> pCircle(mixedFactory.Create<Shape2D>());
+  std::unique_ptr<Shape> pBox(mixedFactory.Create<Shape3D>());
   EXPECT_EQ(pLine->getName(), "Line");
   EXPECT_EQ(pPlane->getName(), "Plane");
+  EXPECT_EQ(pCircle->getName(), "Circle");
+  EXPECT_EQ(pBox->getName(), "Box");
 }
