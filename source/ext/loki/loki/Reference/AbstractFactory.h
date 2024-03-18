@@ -18,6 +18,9 @@
 #ifndef ABSTRACTFACTORY_INC_
 #define ABSTRACTFACTORY_INC_
 
+#ifdef __clang__ // LOKI_CHANGE! ORIGINAL CODE:
+#pragma clang diagnostic ignored "-Woverloaded-virtual" // LOKI_CHANGE! ORIGINAL CODE:
+#endif // LOKI_CHANGE! ORIGINAL CODE: 
 #include "Typelist.h"
 #include "TypeManip.h"
 #include "HierarchyGenerators.h"
