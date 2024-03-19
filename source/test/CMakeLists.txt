@@ -6,4 +6,5 @@ add_subdirectory(functor)
 add_subdirectory(object_factory)
 add_subdirectory(singleton)
 add_subdirectory(smart_ptr)
+add_subdirectory(visitor)
 
