@@ -26,21 +26,6 @@ public:
   DEFINE_VISITABLE()
 };
 
-class MyConcreteVisitor : public Loki::BaseVisitor, public Loki::Visitor<DocElement>, public Loki::Visitor<Paragraph>
-{
-public:
-  MyConcreteVisitor() : docElementCount(0), paragraphCount(0){};
-
-  void Visit(DocElement&) { ++docElementCount; }
-  void Visit(Paragraph&)
-  {
-    ++docElementCount;
-    ++paragraphCount;
-  }
-  int docElementCount;
-  int paragraphCount;
-};
-
 class MyStatVisitor : public Loki::BaseVisitor, public Loki::Visitor<DocElement>, public Loki::Visitor<Paragraph>
 {
 public:
