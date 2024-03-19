@@ -2,41 +2,15 @@
 
 #include <loki/Visitor.h>
 
-/* template <typename R, typename Visited>
-struct DefaultCatchAll
-{
-  static R OnUnknownVisitor(Visited&, Loki::BaseVisitor&) { throw(std::runtime_error("Not registered type!")); }
-};
- */
-
 class DocElement;
 class Paragraph;
-
-typedef Loki::CyclicVisitor<void, TYPELIST_2(DocElement, Paragraph)> MyVisitorBase;
-
-class DocElement
-{
-public:
-  virtual void Visit(MyVisitorBase&) = 0;
-  DEFINE_CYCLIC_VISITABLE(MyVisitorBase)
-};
-
-class Paragraph : public DocElement
-{
-public:
-  DEFINE_CYCLIC_VISITABLE(MyVisitorBase)
-};
-
-class Section : public DocElement
-{
-public:
-  DEFINE_CYCLIC_VISITABLE(MyVisitorBase)
-};
+class Section;
+typedef Loki::CyclicVisitor<void, TYPELIST_3(DocElement, Paragraph, Section)> MyVisitorBase;
 
 class MyStatVisitor : public MyVisitorBase
 {
 public:
-  MyStatVisitor() : docElementCount(0), paragraphCount(0){};
+  MyStatVisitor() : docElementCount(0), paragraphCount(0), sectionCount(0){};
 
   void Visit(DocElement&) { ++docElementCount; }
   void Visit(Paragraph&)
@@ -44,22 +18,61 @@ public:
     ++docElementCount;
     ++paragraphCount;
   }
+  void Visit(Section&)
+  {
+    ++docElementCount;
+    ++sectionCount;
+  }
   int docElementCount;
   int paragraphCount;
+  int sectionCount;
+};
+
+class DocElement
+{
+public:
+  DEFINE_CYCLIC_VISITABLE(MyVisitorBase);
+};
+class Paragraph : public DocElement
+{
+public:
+  DEFINE_CYCLIC_VISITABLE(MyVisitorBase);
+};
+
+class Section : public DocElement
+{
+public:
+  DEFINE_CYCLIC_VISITABLE(MyVisitorBase);
 };
 
 TEST(Visitor, TestCyclic)
 {
-  MyStatVisitor statVisitor;
-  Paragraph par;
-  DocElement* d1 = &par;
-  DocElement d2;
-  d1->Accept(statVisitor);
-  d2.Accept(statVisitor);
-  EXPECT_EQ(statVisitor.docElementCount, 2);
-  EXPECT_EQ(statVisitor.paragraphCount, 1);
+  DocElement d;
+  Paragraph p;
   Section s;
-  EXPECT_ANY_THROW(s.Accept(statVisitor));
+  MyStatVisitor v;
+  d.Accept(v);
+  p.Accept(v);
+  EXPECT_EQ(v.docElementCount, 2);
+  EXPECT_EQ(v.paragraphCount, 1);
+  EXPECT_EQ(v.sectionCount, 0);
+  s.Accept(v);
+  EXPECT_EQ(v.docElementCount, 3);
+  EXPECT_EQ(v.paragraphCount, 1);
+  EXPECT_EQ(v.sectionCount, 1);
+  DocElement* d1 = &d;
+  DocElement* d2 = &p;
+  DocElement* d3 = &s;
+  d1->Accept(v);
+  EXPECT_EQ(v.docElementCount, 4);
+  EXPECT_EQ(v.paragraphCount, 1);
+  EXPECT_EQ(v.sectionCount, 1);
+  d2->Accept(v);
+  EXPECT_EQ(v.docElementCount, 5);
+  EXPECT_EQ(v.paragraphCount, 2);
+  EXPECT_EQ(v.sectionCount, 1);
+  d3->Accept(v);
+  EXPECT_EQ(v.docElementCount, 6);
+  EXPECT_EQ(v.paragraphCount, 2);
+  EXPECT_EQ(v.sectionCount, 2);
 }
-
-TEST(Visitor, TestCyclic) {}
