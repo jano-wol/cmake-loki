@@ -74,10 +74,6 @@ TEST(MultiMethod, TestStaticDispatcher)
   EXPECT_ANY_THROW(disp.Go(l, *pDev, painter));
 }
 
-template <class BaseLhs, class BaseRhs = BaseLhs, typename ResultType = void,
-          typename CallbackType = ResultType (*)(BaseLhs&, BaseRhs&)>
-class BasicDispatcher;
-
 std::string FireRectanglePrinter(Shape& lhs, OutputDevice& rhs)
 {
   Rectangle& r = dynamic_cast<Rectangle&>(lhs);
@@ -109,3 +105,6 @@ TEST(MultiMethod, TestBasicDispatcher)
   Ellipse e;
   EXPECT_ANY_THROW(disp.Go(e, *pDev));
 }
+
+typedef Loki::FnDispatcher<Shape> FnDispatcher;
+
