@@ -1,33 +1,51 @@
 #include <gmock/gmock.h>
 
 #include <loki/MultiMethods.h>
+#include <sstream>
 
 class Shape
 {
 public:
   virtual ~Shape() {}
+  virtual std::string getName() const { return "Shape"; }
 };
 
 class Rectangle : public Shape
-{};
+{
+public:
+  std::string getName() const override { return "Rectangle"; }
+};
 
 class Ellipse : public Shape
-{};
+{
+public:
+  std::string getName() const override { return "Ellipse"; }
+};
 
 class Line : public Shape
-{};
+{
+public:
+  std::string getName() const override { return "Line"; }
+};
 
 class OutputDevice
 {
 public:
   virtual ~OutputDevice() {}
+  virtual std::string getName() const { return "OutputDevice"; }
 };
 
 class Printer : public OutputDevice
-{};
+{
+public:
+  std::string getName() const override { return "Printer"; }
+};
 
 class Screen : public OutputDevice
-{};
+{
+public:
+  std::string getName() const override { return "Screen"; }
+};
 
 struct Painter
 {
@@ -54,4 +72,40 @@ TEST(MultiMethod, TestStaticDispatcher)
   EXPECT_EQ(result, "Ellipse-Printer");
   Line l;
   EXPECT_ANY_THROW(disp.Go(l, *pDev, painter));
+}
+
+template <class BaseLhs, class BaseRhs = BaseLhs, typename ResultType = void,
+          typename CallbackType = ResultType (*)(BaseLhs&, BaseRhs&)>
+class BasicDispatcher;
+
+std::string FireRectanglePrinter(Shape& lhs, OutputDevice& rhs)
+{
+  Rectangle& r = dynamic_cast<Rectangle&>(lhs);
+  Printer& p = dynamic_cast<Printer&>(rhs);
+  std::stringstream ss;
+  ss << r.getName() << "-" << p.getName();
+  return ss.str();
+}
+
+std::string FireEllipsePrinter(Shape& lhs, OutputDevice& rhs)
+{
+  Ellipse& r = dynamic_cast<Ellipse&>(lhs);
+  Printer& p = dynamic_cast<Printer&>(rhs);
+  std::stringstream ss;
+  ss << r.getName() << "-" << p.getName();
+  return ss.str();
+}
+
+TEST(MultiMethod, TestBasicDispatcher)
+{
+  Loki::BasicDispatcher<Shape, OutputDevice, std::string> disp;
+  disp.Add<Rectangle, Printer>(FireRectanglePrinter);
+  Rectangle r;
+  Printer p;
+  Shape* rSh = &r;
+  OutputDevice* pDev = &p;
+  std::string result = disp.Go(*rSh, *pDev);
+  EXPECT_EQ(result, "Rectangle-Printer");
+  Ellipse e;
+  EXPECT_ANY_THROW(disp.Go(e, *pDev));
 }
