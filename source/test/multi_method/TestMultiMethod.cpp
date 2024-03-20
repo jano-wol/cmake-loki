@@ -62,15 +62,15 @@ typedef Loki::StaticDispatcher<Painter, Shape, TYPELIST_2(Rectangle, Ellipse), f
 
 TEST(MultiMethod, TestStaticDispatcher)
 {
-  Dispatcher disp;
-  Ellipse e;
+  Rectangle r;
+  Line l;
   Printer p;
-  Shape* pSh = &e;
+  Shape* pSh = &r;
   OutputDevice* pDev = &p;
   Painter painter;
-  std::string result = disp.Go(*pSh, *pDev, painter);
-  EXPECT_EQ(result, "Ellipse-Printer");
-  Line l;
+
+  Dispatcher disp;
+  EXPECT_EQ(disp.Go(*pSh, *pDev, painter), "Rectangle-Printer");
   EXPECT_ANY_THROW(disp.Go(l, *pDev, painter));
 }
 
@@ -92,18 +92,18 @@ std::string FireEllipsePrinter(Shape& lhs, OutputDevice& rhs)
   return ss.str();
 }
 
-// FnDispatcher is more convinient than BasicDispatcher
+// FnDispatcher is more convinient and equally performant compared to BasicDispatcher
 TEST(MultiMethod, TestBasicDispatcher)
 {
-  Loki::BasicDispatcher<Shape, OutputDevice, std::string> disp;
-  disp.Add<Rectangle, Printer>(FireRectanglePrinter);
   Rectangle r;
+  Ellipse e;
   Printer p;
   Shape* rSh = &r;
   OutputDevice* pDev = &p;
-  std::string result = disp.Go(*rSh, *pDev);
-  EXPECT_EQ(result, "Rectangle-Printer");
-  Ellipse e;
+
+  Loki::BasicDispatcher<Shape, OutputDevice, std::string> disp;
+  disp.Add<Rectangle, Printer>(FireRectanglePrinter);
+  EXPECT_EQ(disp.Go(*rSh, *pDev), "Rectangle-Printer");
   EXPECT_ANY_THROW(disp.Go(e, *pDev));
 }
 
@@ -133,23 +133,21 @@ std::string FireEllipseRectangleSimple(Ellipse& e, Rectangle& r)
 
 TEST(MultiMethod, TestFnDispatcher)
 {
-  FnDispatcher disp;
-  disp.Add<Rectangle, Printer, FireRectanglePrinterSimple>();
   Rectangle r;
+  Ellipse e;
   Printer p;
   Shape* rSh = &r;
-  OutputDevice* pDev = &p;
-  std::string result = disp.Go(*rSh, *pDev);
-  EXPECT_EQ(result, "Rectangle-Printer");
-  Ellipse e;
   Shape* eSh = &e;
+  OutputDevice* pDev = &p;
+
+  FnDispatcher disp;
+  disp.Add<Rectangle, Printer, FireRectanglePrinterSimple>();
+  EXPECT_EQ(disp.Go(*rSh, *pDev), "Rectangle-Printer");
   EXPECT_ANY_THROW(disp.Go(e, *pDev));
   FnDispatcherSymmetric dispSymmetric;
   dispSymmetric.Add<Ellipse, Rectangle, FireEllipseRectangleSimple, true>();
-  result = dispSymmetric.Go(*eSh, *rSh);
-  EXPECT_EQ(result, "Ellipse-Rectangle");
-  result = dispSymmetric.Go(*rSh, *eSh);
-  EXPECT_EQ(result, "Ellipse-Rectangle");
+  EXPECT_EQ(dispSymmetric.Go(*eSh, *rSh), "Ellipse-Rectangle");
+  EXPECT_EQ(dispSymmetric.Go(*rSh, *eSh), "Ellipse-Rectangle");
   EXPECT_ANY_THROW(dispSymmetric.Go(*eSh, *eSh));
 }
 
@@ -192,36 +190,36 @@ struct SomeClass
 TEST(MultiMethod, TestFunctorDispatcher)
 {
   Rectangle r;
+  Ellipse e;
   Printer p;
   Screen s;
   Shape* rSh = &r;
+  Shape* eSh = &e;
   OutputDevice* pDev = &p;
   OutputDevice* sDev = &s;
-  Ellipse e;
-  Shape* eSh = &e;
   SomeClass myObject;
   Loki::Functor<std::string, TYPELIST_2(Rectangle&, Printer&)> member1(&myObject, &SomeClass::FireRectanglePrinter);
   Loki::Functor<std::string, TYPELIST_2(Ellipse&, Printer&)> member2(&myObject, &SomeClass::FireEllipsePrinter);
   Loki::Functor<std::string, TYPELIST_2(Rectangle&, Printer&)> function1(FireRectanglePrinterSimple);
   Loki::Functor<std::string, TYPELIST_2(Ellipse&, Printer&)> function2(FireEllipsePrinterSimple);
 
-  FunctorDispatcher disp1;
-  disp1.Add<Rectangle, Printer>(SomeFunctor());
-  disp1.Add<Ellipse, Printer>(SomeFunctor());
-  EXPECT_EQ(disp1.Go(*rSh, *pDev), "Rectangle-Printer-functor");
-  EXPECT_EQ(disp1.Go(*eSh, *pDev), "Ellipse-Printer-functor");
-  EXPECT_EQ(disp1.Go(e, *pDev), "Ellipse-Printer-functor");
-  EXPECT_ANY_THROW(disp1.Go(e, *sDev));
-  disp1.Add<Rectangle, Printer>(member1);
-  disp1.Add<Ellipse, Printer>(member2);
-  EXPECT_EQ(disp1.Go(*rSh, *pDev), "Rectangle-Printer-class");
-  EXPECT_EQ(disp1.Go(*eSh, *pDev), "Ellipse-Printer-class");
-  EXPECT_EQ(disp1.Go(e, *pDev), "Ellipse-Printer-class");
-  EXPECT_ANY_THROW(disp1.Go(e, *sDev));
-  disp1.Add<Rectangle, Printer>(function1);
-  disp1.Add<Ellipse, Printer>(function2);
-  EXPECT_EQ(disp1.Go(*rSh, *pDev), "Rectangle-Printer");
-  EXPECT_EQ(disp1.Go(*eSh, *pDev), "Ellipse-Printer");
-  EXPECT_EQ(disp1.Go(e, *pDev), "Ellipse-Printer");
-  EXPECT_ANY_THROW(disp1.Go(e, *sDev));
+  FunctorDispatcher disp;
+  disp.Add<Rectangle, Printer>(SomeFunctor());
+  disp.Add<Ellipse, Printer>(SomeFunctor());
+  EXPECT_EQ(disp.Go(*rSh, *pDev), "Rectangle-Printer-functor");
+  EXPECT_EQ(disp.Go(*eSh, *pDev), "Ellipse-Printer-functor");
+  EXPECT_EQ(disp.Go(e, *pDev), "Ellipse-Printer-functor");
+  EXPECT_ANY_THROW(disp.Go(e, *sDev));
+  disp.Add<Rectangle, Printer>(member1);
+  disp.Add<Ellipse, Printer>(member2);
+  EXPECT_EQ(disp.Go(*rSh, *pDev), "Rectangle-Printer-class");
+  EXPECT_EQ(disp.Go(*eSh, *pDev), "Ellipse-Printer-class");
+  EXPECT_EQ(disp.Go(e, *pDev), "Ellipse-Printer-class");
+  EXPECT_ANY_THROW(disp.Go(e, *sDev));
+  disp.Add<Rectangle, Printer>(function1);
+  disp.Add<Ellipse, Printer>(function2);
+  EXPECT_EQ(disp.Go(*rSh, *pDev), "Rectangle-Printer");
+  EXPECT_EQ(disp.Go(*eSh, *pDev), "Ellipse-Printer");
+  EXPECT_EQ(disp.Go(e, *pDev), "Ellipse-Printer");
+  EXPECT_ANY_THROW(disp.Go(e, *sDev));
 }
