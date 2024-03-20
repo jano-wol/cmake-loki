@@ -743,7 +743,7 @@ namespace Loki
 
         // Member functions
 
-        Functor() : spImpl_(0)
+        Functor() : spImpl_(nullptr) // LOKI_CHANGE! ORIGINAL CODE: Functor() : spImpl_(0)
         {}
         
         Functor(const Functor& rhs) : spImpl_(Impl::Clone(rhs.spImpl_.get()))
