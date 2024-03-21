@@ -12,5 +12,5 @@ target_link_libraries(${target}
 	GTest::gtest_main
 	loki
 )
-gtest_discover_tests(${target})
+gtest_add_tests(TARGET ${target})
 
