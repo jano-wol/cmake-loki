@@ -556,13 +556,13 @@ namespace Loki
         {}
         
         static void OnDefault(P val)
-        { assert(val); }
+        { (void) val; assert(val); } // LOKI_CHANGE! ORIGINAL CODE: { assert(val); }     
         
         static void OnInit(P val)
-        { assert(val); }
+        { (void) val; assert(val); } // LOKI_CHANGE! ORIGINAL CODE: { assert(val); }     
         
         static void OnDereference(P val)
-        { assert(val); }
+        { (void) val; assert(val); } // LOKI_CHANGE! ORIGINAL CODE: { assert(val); }     
         
         static void Swap(AssertCheckStrict&)
         {}
