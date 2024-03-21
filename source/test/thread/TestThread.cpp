@@ -45,22 +45,10 @@ public:
 template <class Host>
 class ObjectLevelLockable
 {
+public:
   mutable std::mutex mtx_;
 
-public:
-  class Lock;
-  friend class Lock;
-
-  class Lock
-  {
-    ObjectLevelLockable const& host_;
-    Lock(const Lock&);
-    Lock& operator=(const Lock&);
-
-  public:
-    explicit Lock(const ObjectLevelLockable& host) : host_(host) { host_.mtx_.lock(); }
-    ~Lock() { host_.mtx_.unlock(); }
-  };
+  std::unique_lock<std::mutex> Lock(const ObjectLevelLockable&) { return std::unique_lock<std::mutex>(mtx_); }
 
   typedef volatile Host VolatileType;
 
@@ -84,7 +72,6 @@ class A
 {
 public:
   A() { ++constuctorCount; }
-  std::string getName() const { return "A"; }
   inline static size_t constuctorCount;
 };
 
@@ -104,4 +91,25 @@ TEST(Thread, TestThreadClassLevelLockableSingleton)
   t1.join();
   t2.join();
   EXPECT_EQ(A::constuctorCount, 1);
+}
+
+class TestClass2 : public ObjectLevelLockable<TestClass2>
+{
+public:
+  void inc()
+  {
+    auto lock = Lock(*this);
+    count++;
+  }
+  size_t count = 0;
+};
+
+TEST(Thread, TestObjectLevelLockable)
+{
+  TestClass2 t;
+  std::thread t1(&TestClass2::inc, std::ref(t));
+  std::thread t2(&TestClass2::inc, std::ref(t));
+  t1.join();
+  t2.join();
+  EXPECT_EQ(t.count, 2);
 }
