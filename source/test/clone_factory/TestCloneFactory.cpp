@@ -109,7 +109,7 @@ TEST(CloneFactory, TestCloneFactory)
   auto* nr = new NotRegistered;
   auto* c = new Circle;
   EXPECT_ANY_THROW(cloneFactory.CreateObject(nr));
-  EXPECT_NO_THROW(cloneFactory.CreateObject(c));
+  EXPECT_NO_THROW(std::unique_ptr<Shape>(cloneFactory.CreateObject(c)));
   delete c;
   delete nr;
 }

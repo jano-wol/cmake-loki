@@ -72,6 +72,7 @@ class Entity
 {
 public:
   virtual int getHp() const = 0;
+  virtual ~Entity() {}
 
 protected:
   virtual Entity* Clone() const = 0;
@@ -162,13 +163,16 @@ TEST(AbstractFactory, TestPrototypeFactory)
 {
   typedef Loki::SingletonHolder<Proto, Loki::CreateUsingNew> ProtoFactory;
   auto& protoFactory = ProtoFactory::Instance();
-  protoFactory.SetPrototype<SillySoldier>(new SillySoldier);
-  protoFactory.SetPrototype<SillyMonster>(new SillyMonster);
-  Entity* pSoldier = protoFactory.Create<Soldier>();
-  Entity* pMonster = protoFactory.Create<Monster>();
+  std::unique_ptr<SillySoldier> sillySoldierPtr(new SillySoldier);
+  std::unique_ptr<SillyMonster> sillyMonsterPtr(new SillyMonster);
+  protoFactory.SetPrototype<SillySoldier>(sillySoldierPtr.get());
+  protoFactory.SetPrototype<SillyMonster>(sillyMonsterPtr.get());
+  std::unique_ptr<Entity> pSoldier(protoFactory.Create<Soldier>());
+  std::unique_ptr<Entity> pMonster(protoFactory.Create<Monster>());
   EXPECT_EQ(pSoldier->getHp(), 10);
   EXPECT_EQ(pMonster->getHp(), 50);
-  protoFactory.SetPrototype<BadSoldier>(new BadSoldier);
-  pSoldier = protoFactory.Create<Soldier>();
+  std::unique_ptr<BadSoldier> badSoldierPtr(new BadSoldier);
+  protoFactory.SetPrototype<BadSoldier>(badSoldierPtr.get());
+  pSoldier = std::unique_ptr<Entity>(protoFactory.Create<Soldier>());
   EXPECT_EQ(pSoldier->getHp(), 50);
 }
