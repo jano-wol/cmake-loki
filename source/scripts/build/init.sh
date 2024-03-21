@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
-if [[ $1 != "debug" ]] && [[ $1 != "release" ]]; then
-    echo "First command line argument should be debug or release"
+if [[ $1 != "debug" ]] && [[ $1 != "debug_thread" ]] && [[ $1 != "release" ]]; then
+    echo "First command line argument should be debug or debug_thread or release"
     exit 1
 fi	
 CMAKE_BUILD_TYPE=$1
