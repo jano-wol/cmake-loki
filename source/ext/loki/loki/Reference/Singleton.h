@@ -396,6 +396,7 @@ namespace Loki
         LifetimePolicy, ThreadingModel>::Instance()
     {
         typename ThreadingModel<T>::Lock guard;
+        (void)guard;
         if (!pInstance_)
         {
             MakeInstance();

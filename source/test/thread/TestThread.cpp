@@ -99,6 +99,7 @@ public:
   void inc()
   {
     auto lock = Lock(*this);
+    (void)lock;
     count++;
   }
   size_t count = 0;
