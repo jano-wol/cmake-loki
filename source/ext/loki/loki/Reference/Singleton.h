@@ -395,8 +395,8 @@ namespace Loki
     inline T& SingletonHolder<T, CreationPolicy, 
         LifetimePolicy, ThreadingModel>::Instance()
     {
-        typename ThreadingModel<T>::Lock guard;
-        (void)guard;
+        typename ThreadingModel<T>::Lock guard; // LOKI_CHANGE! ORIGINAL CODE: 
+        (void)guard; // LOKI_CHANGE! ORIGINAL CODE: 
         if (!pInstance_)
         {
             MakeInstance();
@@ -418,7 +418,8 @@ namespace Loki
     void SingletonHolder<T, CreationPolicy, 
         LifetimePolicy, ThreadingModel>::MakeInstance()
     {
-        
+        // LOKI_CHANGE! ORIGINAL CODE: typename ThreadingModel<T>::Lock guard;  
+        // LOKI_CHANGE! ORIGINAL CODE: (void)guard;  
         if (!pInstance_)
         {
             if (destroyed_)
