@@ -8,10 +8,8 @@ class A
 public:
   A() { ++constuctorCount; }
   std::string getName() const { return "A"; }
-  static size_t constuctorCount;
+  inline static size_t constuctorCount;
 };
-
-size_t A::constuctorCount = 0;
 
 TEST(Singleton, TestCreation)
 {
