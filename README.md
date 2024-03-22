@@ -1,5 +1,5 @@
 # cmake-loki
-cmake-loki demonstrates how to integrate the Loki library (written by Andrei Alexandrescu) to a modern and scalable CMake/C++ project.  
+cmake-loki demonstrates how to integrate the features of Loki library (written by Andrei Alexandrescu) to a modern and scalable CMake/C++ project.  
 
 # Setup cmake-loki
 Supported os: Linux  
